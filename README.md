@@ -19,7 +19,7 @@
 `Assegurar a Precisão Contábil`
 > Garantir que a implementação do sistema resulte em uma contabilidade precisa, contribuindo para a saúde financeira da empresa e prevenindo problemas contábeis no encerramento do expediente.
 
-`Instrumentos de avaliação podem incluir`
+`Instrumentos de avaliação`
 > Avaliações de desempenho dos funcionários após a implementação do sistema, para verificar a eficácia do treinamento.
 Auditorias contábeis regulares para avaliar a precisão contábil.
 Pesquisas de satisfação dos funcionários para avaliar o impacto do novo sistema em seu trabalho diário.
