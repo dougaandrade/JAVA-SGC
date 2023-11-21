@@ -7,6 +7,7 @@
 
 - `Java`
 - `MySQL`
+- `JDBC`
 
 ## O que visamos com esse projeto?
 
