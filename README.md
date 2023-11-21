@@ -1,8 +1,9 @@
-## Getting Started
+## Sistema de Gerenciamento de Caixa
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Depois de analisarmos a situação, constatamos a existência de um desafio: a ausência de um sistema de registro adequado para os lucros diários da empresa, o que atualmente é feito manualmente e pode resultar em problemas de precisão contábil no encerramento do expediente. Os funcionários da empresa são o grupo mais diretamente afetado pela ausência de um sistema de registro eficaz, já que isso impacta seu trabalho diário e a precisão de seus ganhos.
 
-## Folder Structure
+
+## Tecnologia
 
 The workspace contains two folders by default, where:
 
