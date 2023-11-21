@@ -12,6 +12,20 @@ Meanwhile, the compiled output files will be generated in the `bin` folder by de
 
 > If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
 
-## Dependency Management
+## O quue visamos com esse projeto?
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+`Implementar um Sistema de Registro Eficiente`
+Desenvolver e implantar um sistema de registro automatizado que seja capaz de registrar com precisão os ganhos diários da empresa, eliminando o processo manual.
+
+`Capacitar os Funcionários`
+Fornecer treinamento e capacitação aos funcionários da empresa para que possam utilizar eficazmente o novo sistema de registro, garantindo que compreendam sua importância e funcionamento.
+
+`Assegurar a Precisão Contábil`
+Garantir que a implementação do sistema resulte em uma contabilidade precisa, contribuindo para a saúde financeira da empresa e prevenindo problemas contábeis no encerramento do expediente.
+
+`Instrumentos de avaliação podem incluir`
+Avaliações de desempenho dos funcionários após a implementação do sistema, para verificar a eficácia do treinamento.
+Auditorias contábeis regulares para avaliar a precisão contábil.
+Pesquisas de satisfação dos funcionários para avaliar o impacto do novo sistema em seu trabalho diário.
+Comparação dos resultados financeiros antes e depois da implementação para medir a eficácia do projeto em assegurar a precisão contábil.
+
