@@ -8,7 +8,7 @@
 - `Java`
 - `MySQL`
 
-## O quue visamos com esse projeto?
+## O que visamos com esse projeto?
 
 `Implementar um Sistema de Registro Eficiente`
 > Desenvolver e implantar um sistema de registro automatizado que seja capaz de registrar com precisão os ganhos diários da empresa, eliminando o processo manual.
