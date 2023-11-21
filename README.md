@@ -5,8 +5,6 @@ Depois de analisarmos a situação, constatamos a existência de um desafio: a a
 
 ## Tecnologia
 
-The workspace contains two folders by default, where:
-
 - `Java`
 - `MySQL`
 
