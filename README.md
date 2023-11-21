@@ -7,8 +7,8 @@ Depois de analisarmos a situação, constatamos a existência de um desafio: a a
 
 The workspace contains two folders by default, where:
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+- `Java`
+- `MySQL`
 
 Meanwhile, the compiled output files will be generated in the `bin` folder by default.
 
