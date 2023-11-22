@@ -1,10 +1,7 @@
 package Aplicacao;
 import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
-
 
 public class Transacao {
 	
@@ -46,16 +43,6 @@ public class Transacao {
 	public String getDateAberturaFormatada() {
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		return dateFormat.format(dataAberturaConta);
-	}
-	
-	// exibir extrato bancario
-	public void exibirExtrato() {
-		System.out.println("Tipo Pagamento: " + tipoPag + "\n" + "Valor : " + valor + "\n" + "Data da Operação " + getDateAberturaFormatada() + "\n");
-	}
-	
-	public String toString() {
-		return "Tipo Pagamento : " + this.tipoPag + "\n" + "Valor : " + valor + "\n" + "Data de Abertura " + getDateAberturaFormatada();
-		 
 	}
 
 }

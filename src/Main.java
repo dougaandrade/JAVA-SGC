@@ -4,6 +4,7 @@ import java.util.Scanner;
 import Aplicacao.Transacao;
 import DAO.TransacaoDAO;
 
+import java.io.Console;
 import java.util.ArrayList;
 
 public class Main {
