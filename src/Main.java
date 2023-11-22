@@ -18,7 +18,7 @@ public class Main {
         Scanner entrada = new Scanner(System.in);
 
         do {
-            Menu.GerarMenu();
+            MenuHome.GerarMenu();
             opcao = entrada.nextInt();
 
             switch (opcao) {
@@ -30,12 +30,12 @@ public class Main {
             		Extrato();
             		break;
                     
-                case 0:
-                    System.out.println("Volte Sempre");
+                case 3 :
+                    System.out.println("\t\n SGC Volte Sempre! \n");
                     break;
 
                 default:
-                    System.out.println("Opção Invalida!.");
+                    System.out.println("Opï¿½ï¿½o Invalida!.");
             }
         } while (opcao != 0);
     }
@@ -43,21 +43,21 @@ public class Main {
     // switch case para inserir valor
     private static void InserirValor() {
     	
-    	System.out.println("Valor da OperaÃ§Ã£o");
+    	System.out.println("\t\n [Nova OperaÃ§Ã£o] \n");
 		Scanner criar = new Scanner(System.in);
 		
-	   	   System.out.println("Digite o Valor: ");
+	   	   System.out.println("Insira o Valor:");
 	      	double valor = Double.parseDouble(criar.nextLine());
 	      	
-	      	System.out.println("Tipo De Pagamento");
-	      	System.out.println("**Precione enter para escolher o tipo de pagamento**");
+	      	System.out.println("\n[Forma de Pagamento]");
+	      	System.out.println("(ENTER para exibir as formas de pagamento)");
 	      	String tipoPag = criar.nextLine();
 	      		
 	    
 		int opcao2;
 		
 		do {
-			Menu2.GerarMenu2();
+			MenuPay.GerarMenu2();
 			opcao2 = Integer.parseInt(criar.nextLine());
 			
 			switch (opcao2) {
@@ -79,7 +79,7 @@ public class Main {
 				break;
 			
 			default:
-                System.out.println("Opção invalida!.");
+                System.out.println("\t\n OpcÃ£o invalida!\n");
 			}
 		}while (tipoPag == null);
 		
@@ -98,6 +98,6 @@ public class Main {
         for (Transacao conta : listaDeContas) {
         	conta.exibirExtrato();
         	}
-        System.out.println("Esses sao os ultimos lançamentos!");
+        System.out.println("\n\t Esses sÃ£o os ultimos lancamentos!\n");
     }
 }
