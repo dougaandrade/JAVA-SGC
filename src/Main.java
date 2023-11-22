@@ -95,9 +95,12 @@ public class Main {
     //puxar extrato da conta
     public static void Extrato() {
         Transacao exibirExtrato = null;
-        for (Transacao conta : listaDeContas) {
-        	conta.exibirExtrato();
-        	}
-        System.out.println("\n\t Esses são os ultimos lancamentos!\n");
+
+		new TransacaoDAO().Extrato(exibirExtrato);
+
+        // for (Transacao conta : listaDeContas) {
+        // 	conta.exibirExtrato();
+        // 	}
+        // System.out.println("\n\t Esses são os ultimos lancamentos!\n");
     }
 }
