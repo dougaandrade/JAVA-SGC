@@ -43,11 +43,36 @@ public class TransacaoDAO {
             ResultSet result = ps.executeQuery();
                 
 
+             System.out.println("\n Extrato Parcial:");
             while (result.next()) {
                 System.out.println("\n");
                 System.out.println("Tipo do Pagamento: " + result.getString("tipoPag")); 
                 System.out.println("Quantidade de Recibo: " + result.getString("COUNT(tipoPag)"));
                 System.out.println("Total em valor: " + result.getString("SUM(valor)"));
+                System.out.println("\n");
+            }
+            System.out.println("Esses foram os ultimos registros!");
+            return;
+        }catch(Exception e){System.out.println(e);}
+        return;
+    }
+
+    public void ExtratoDetalhado(Transacao extrato){
+        
+             String sql = "SELECT idTransacao, tipoPag, valor, Data  FROM projeto.transacao";
+        try{
+            PreparedStatement ps = null;
+            ps = Conexao.getConexao().prepareStatement(sql);
+
+            ResultSet result = ps.executeQuery();
+                
+            System.out.println("\n Extrato Detalhado:");
+            while (result.next()) {
+                System.out.println("\n");
+                System.out.println("Id Transacao: " + result.getString("idTransacao")); 
+                System.out.println("Tipo do Pagamento: " + result.getString("tipoPag")); 
+                System.out.println("Valor: " + result.getString("valor"));
+                System.out.println("Data: " + result.getString("Data"));
                 System.out.println("\n");
             }
             System.out.println("Esses foram os ultimos registros!");

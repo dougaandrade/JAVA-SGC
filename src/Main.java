@@ -96,11 +96,39 @@ public class Main {
     public static void Extrato() {
         Transacao exibirExtrato = null;
 
-		new TransacaoDAO().Extrato(exibirExtrato);
+		System.out.println("\n");
+		System.out.println("1. Extrato Parcial");
+		System.out.println("2. Extrato Detalhado");
+		System.out.println("\n [Insira Opção] \n");
 
-        // for (Transacao conta : listaDeContas) {
-        // 	conta.exibirExtrato();
-        // 	}
-        // System.out.println("\n\t Esses são os ultimos lancamentos!\n");
+		int opcao3;
+		Scanner criar = new Scanner(System.in);
+		opcao3 = Integer.parseInt(criar.nextLine());
+		do {
+			switch (opcao3) {
+			
+			case 1: 
+			ExtratoParcial();
+			break;
+
+			case 2: 
+			ExtratoDetalhado();
+			break;
+
+			default:
+                System.out.println("\t\n Opcão invalida!\n");
+			}
+		}while (opcao3 == 0);
+        
     }
+
+	private static void ExtratoParcial() {
+		Transacao exibirExtrato = null;
+		new TransacaoDAO().Extrato(exibirExtrato);
+	}
+
+	public static void ExtratoDetalhado() {
+		Transacao exibirExtrato = null;
+		new TransacaoDAO().ExtratoDetalhado(exibirExtrato);
+	}
 }
