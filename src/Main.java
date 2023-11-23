@@ -8,7 +8,7 @@ import java.io.Console;
 import java.util.ArrayList;
 
 public class Main {
-	
+
 	public static ArrayList<Transacao> listaDeContas = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
@@ -36,7 +36,7 @@ public class Main {
                     break;
 
                 default:
-                    System.out.println("Op��o Invalida!.");
+                    System.out.println("Opcao Invalida!.");
             }
         } while (opcao != 0);
     }
@@ -87,6 +87,7 @@ public class Main {
 		
 			Transacao transacao = new Transacao(tipoPag, valor);
 			transacao.setTransacao(valor, tipoPag);
+			System.out.println("\n [Realizado com Sucesso!] \n");
 			
 			new TransacaoDAO().cadastrarTransacao(transacao);
 			listaDeContas.add(transacao);

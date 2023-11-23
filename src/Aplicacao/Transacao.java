@@ -39,7 +39,7 @@ public class Transacao {
 	}
 	
 	
-	//data formatada quando criar conta 
+	//data formatada 
 	public String getDateAberturaFormatada() {
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		return dateFormat.format(dataAberturaConta);
