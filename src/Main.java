@@ -58,7 +58,7 @@ public class Main {
 		int opcao2;
 		
 		do {
-			MenuPay.GerarMenu2();
+			MenuPay.payMethods();
 			opcao2 = Integer.parseInt(criar.nextLine());
 			
 			switch (opcao2) {
