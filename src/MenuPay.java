@@ -1,6 +1,6 @@
 public class MenuPay {
 
-    public static void GerarMenu2() {
+    public static void payMethods() {
         System.out.println("1. Dinheiro");
         System.out.println("2. PIX");
         System.out.println("3. Cartao de Credito");
