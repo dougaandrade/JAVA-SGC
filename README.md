@@ -1,28 +1,43 @@
-## Sistema de Gerenciamento de Caixa
+# 📌 Sistema de Gerenciamento de Caixa (SGC)
 
-> Depois de analisarmos a situação, constatamos a existência de um desafio: a ausência de um sistema de registro adequado para os lucros diários da empresa, o que atualmente é feito manualmente e pode resultar em problemas de precisão contábil no encerramento do expediente. Os funcionários da empresa são o grupo mais diretamente afetado pela ausência de um sistema de registro eficaz, já que isso impacta seu trabalho diário e a precisão de seus ganhos.
+Este projeto é um sistema automatizado para registrar os lucros diários de uma empresa, substituindo processos manuais que podem resultar em imprecisões contábeis. Desenvolvido em **Java** e utilizando **MySQL** como banco de dados, o SGC visa melhorar a eficiência operacional e garantir a precisão dos registros financeiros.
 
+## 🚀 Tecnologias Utilizadas
 
-## Tecnologia
+- ✅ **Java** – Linguagem de programação principal.
+- ✅ **MySQL** – Banco de dados para armazenamento das transações.
+- ✅ **JDBC** – Conector para integração entre Java e MySQL.
+- ✅ **Swing** – (Opcional) Interface gráfica para interação com o usuário.
 
-- `Java`
-- `MySQL`
-- `JDBC`
+## 🔥 Funcionalidades
 
-## O que visamos com esse projeto?
+- 🔹 Registro diário dos lucros.
+- 🔹 Geração de relatórios financeiros.
+- 🔹 Interface amigável para facilitar o uso.
+- 🔹 Validação e segurança dos dados registrados.
 
-`Implementar um Sistema de Registro Eficiente`
-> Desenvolver e implantar um sistema de registro automatizado que seja capaz de registrar com precisão os ganhos diários da empresa, eliminando o processo manual.
+## 📂 Como Executar o Projeto
 
-`Capacitar os Funcionários`
-> Fornecer treinamento e capacitação aos funcionários da empresa para que possam utilizar eficazmente o novo sistema de registro, garantindo que compreendam sua importância e funcionamento.
+### 📌 Pré-requisitos
 
-`Assegurar a Precisão Contábil`
-> Garantir que a implementação do sistema resulte em uma contabilidade precisa, contribuindo para a saúde financeira da empresa e prevenindo problemas contábeis no encerramento do expediente.
+Antes de começar, você precisará ter instalado em sua máquina:
 
-`Instrumentos de avaliação`
-> Avaliações de desempenho dos funcionários após a implementação do sistema, para verificar a eficácia do treinamento.
-Auditorias contábeis regulares para avaliar a precisão contábil.
-Pesquisas de satisfação dos funcionários para avaliar o impacto do novo sistema em seu trabalho diário.
-Comparação dos resultados financeiros antes e depois da implementação para medir a eficácia do projeto em assegurar a precisão contábil.
+- **JDK 17** ou superior.
+- **MySQL** (com o banco de dados configurado).
+- **Maven**.
+- **Git**.
 
+### 🚀 Clonando e Executando
+
+```bash
+# Clone este repositório
+git clone https://github.com/dougaandrade/JAVA-SGC.git
+
+# Acesse a pasta do projeto
+cd JAVA-SGC
+
+# Compile o projeto
+mvn clean install
+
+# Execute a aplicação
+java -jar target/sgc.jar
