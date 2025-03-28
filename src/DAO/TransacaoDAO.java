@@ -10,7 +10,6 @@ public class TransacaoDAO {
 
     protected PreparedStatement ps = null;
 
-    // Method to insert a transaction into the database
     public void cadastrarTransacao(Transacao transacao) {
 
         String sql = "INSERT INTO TRANSACAO (TIPOPAG, VALOR, DATA) VALUES (?, ?, ?)";
@@ -29,10 +28,8 @@ public class TransacaoDAO {
         }
     }
 
-    // Method to generate the partial extract of transactions
     public void Extrato(Transacao extrato) {
 
-        // Alias the aggregate columns to make them easier to access
         String sql = "SELECT tipoPag, COUNT(tipoPag) AS countTipoPag, SUM(valor) AS totalValor " +
                 "FROM sgc_postgres.public.transacao GROUP BY tipoPag";
         try {
@@ -42,11 +39,11 @@ public class TransacaoDAO {
 
             System.out.println("\n Extrato Parcial:");
             while (result.next()) {
-                // Access the aliased columns
+
                 System.out.println("\n");
                 System.out.println("Tipo do Pagamento: " + result.getString("tipoPag"));
-                System.out.println("Quantidade de Recibo: " + result.getInt("countTipoPag")); // Use getInt() for count
-                System.out.println("Total em valor: " + result.getDouble("totalValor")); // Use getDouble() for sum
+                System.out.println("Quantidade de Recibo: " + result.getInt("countTipoPag"));
+                System.out.println("Total em valor: " + result.getDouble("totalValor"));
                 System.out.println("\n");
             }
             System.out.println("Esses foram os ultimos registros!");
@@ -55,7 +52,6 @@ public class TransacaoDAO {
         }
     }
 
-    // Method to generate a detailed extract of transactions
     public void ExtratoDetalhado(Transacao extrato) {
 
         String sql = "SELECT idTransacao, tipoPag, valor, Data  FROM sgc_postgres.public.transacao";

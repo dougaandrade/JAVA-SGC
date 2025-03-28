@@ -10,7 +10,6 @@ public class ProdutoDAO {
 
     protected PreparedStatement ps = null;
 
-    // Method to register a product in the database
     public void cadastrarProduto(Produto produto) {
 
         String sql = "INSERT INTO produto (id_produto, nm_produto, qt_produto) VALUES (?, ?, ?)";
@@ -29,7 +28,6 @@ public class ProdutoDAO {
 
     }
 
-    // Method to retrieve detailed product information
     public void dtProduto(Produto produto) {
 
         String sql = "SELECT id_produto, nm_produto, qt_produto FROM sgc_postgres.public.produto";
@@ -52,7 +50,6 @@ public class ProdutoDAO {
         }
     }
 
-    // Method to retrieve the sum of product quantities
     public void dtProdutoSum(Produto produto) {
 
         String sql = "SELECT id_produto, nm_produto, SUM(qt_produto) FROM sgc_postgres.public.produto GROUP BY id_produto";
