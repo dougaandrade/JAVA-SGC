@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class Conexao {
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/sgc_postgres"; // Verifique a URL
+    private static final String URL = "jdbc:postgresql://localhost:5435/sgc_postgres"; // Verifique a URL
     private static final String USER = "root"; // Verifique o usuário
     private static final String PASSWORD = "root"; // Verifique a senha
     private static Connection conn;

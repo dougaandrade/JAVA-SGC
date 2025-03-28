@@ -1,4 +1,9 @@
+package menus;
+
 public class MenuPay {
+
+    private MenuPay() {
+    }
 
     public static void payMethods() {
         System.out.println("1. Dinheiro");

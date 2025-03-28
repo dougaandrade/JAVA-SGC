@@ -1,4 +1,9 @@
+package menus;
+
 public class MenuHome {
+
+    private MenuHome() {
+    }
 
     public static void GerarMenu() {
         System.out.println("\t\n Bem vindo ao SGC\n");

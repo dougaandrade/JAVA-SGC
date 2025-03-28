@@ -17,9 +17,9 @@ public class ProdutoDAO {
 
         try {
             ps = Conexao.getConexao().prepareStatement(sql);
-            ps.setInt(1, produto.getIdProdudo()); // Corrected method name
-            ps.setString(2, produto.getNmProduto()); // Corrected method name
-            ps.setInt(3, produto.getQtProdudo()); // Corrected method name
+            ps.setInt(1, produto.getIdProdudo());
+            ps.setString(2, produto.getNmProduto());
+            ps.setInt(3, produto.getQtProdudo());
 
             ps.execute();
             ps.close();

@@ -5,6 +5,9 @@ import aplicacao.Transacao;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import menus.MenuExtrato;
+import menus.MenuHome;
+import menus.MenuPay;
 
 public class Main {
 
@@ -14,7 +17,7 @@ public class Main {
 		return listaDeContas;
 	}
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		// Initialize scanner once and pass it to methods
 		try (Scanner entrada = new Scanner(System.in)) {
 			int opcao;
@@ -33,7 +36,6 @@ public class Main {
 		}
 	}
 
-	// switch case para inserir valor
 	private static void InserirValor(Scanner criar) {
 		System.out.println("\t\n [Nova Operação] \n");
 		try {
@@ -93,14 +95,9 @@ public class Main {
 		}
 	}
 
-	// Pulling the statement of the account
 	private static void Extrato(Scanner criar) {
-		System.out.println("\n");
-		System.out.println("1. Extrato Parcial");
-		System.out.println("2. Extrato Detalhado");
-		System.out.println("3. Extrato Produto Detalhado");
-		System.out.println("4. Extrato Produto Total");
-		System.out.println("\n [Insira Opção] \n");
+
+		MenuExtrato.GerarMenuExtrato();
 
 		int opcao3 = 0;
 		try {
