@@ -1,125 +1,100 @@
-
-import java.util.Scanner;
-
-import Aplicacao.Produto;
-import Aplicacao.Transacao;
-import DAO.TransacaoDAO;
 import DAO.ProdutoDAO;
-
-import java.io.Console;
-import java.util.ArrayList;
+import DAO.TransacaoDAO;
+import aplicacao.Produto;
+import aplicacao.Transacao;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
-	public static ArrayList<Transacao> listaDeContas = new ArrayList<>();
+	private static final List<Transacao> listaDeContas = new LinkedList<>();
 
-    public static void main(String[] args) throws Exception {
-    	//switch case do menu principal//
-        int opcao;
-        Scanner entrada = new Scanner(System.in);
+	public static List<Transacao> getListaDeContas() {
+		return listaDeContas;
+	}
 
-        do {
-            MenuHome.GerarMenu();
-            opcao = entrada.nextInt();
+	public static void main(String[] args) throws Exception {
+		// Initialize scanner once and pass it to methods
+		try (Scanner entrada = new Scanner(System.in)) {
+			int opcao;
+			do {
+				MenuHome.GerarMenu();
+				opcao = entrada.nextInt();
+				entrada.nextLine(); // Consume the newline character left by nextInt()
 
-            switch (opcao) {
-            	case 1 :
-            		InserirValor();
-                    break;
-                    
-            	case 2 :
-            		Extrato();
-            		break;
-                    
-                case 3 :
-                    System.out.println("\t\n SGC Volte Sempre! \n");
-                    break;
+				switch (opcao) {
+					case 1 -> InserirValor(entrada); // Pass the scanner here
+					case 2 -> Extrato(entrada); // Pass the scanner here
+					case 3 -> System.out.println("\t\n SGC Volte Sempre! \n");
+					default -> System.out.println("Opcao Invalida!.");
+				}
+			} while (opcao != 0);
+		}
+	}
 
-                default:
-                    System.out.println("Opcao Invalida!.");
-            }
-        } while (opcao != 0);
-    }
-	
-    // switch case para inserir valor
-    private static void InserirValor() {
-    	
-    	System.out.println("\t\n [Nova Operação] \n");
-		Scanner criar = new Scanner(System.in);
-		
-	   	   System.out.println("Insira o Valor:");
-	      	double valor = Double.parseDouble(criar.nextLine());
-	      	
-	      	System.out.println("\n[Forma de Pagamento]");
-	      	System.out.println("(ENTER para exibir as formas de pagamento)");
-	      	String tipoPag = criar.nextLine();
-	      		
-	    
-		int opcao2;
-		
-		do {
-			MenuPay.payMethods();
-			opcao2 = Integer.parseInt(criar.nextLine());
-			
-			switch (opcao2) {
-			
-			case 1: 
-				tipoPag = "\n" + "Dinheiro";
-			break;
-			
-			case 2: 
-				tipoPag = "\n" + "PIX";
-			break;
-			
-			case 3: 
-				tipoPag = "\n" + "Cartao de Credito";
-				break;
-				
-			case 4: 
-				tipoPag = "\n" + "Cartao de Debito";
-				break;
-			
-			default:
-                System.out.println("\t\n Opcão invalida!\n");
-			}
-		}while (tipoPag == null);
-		
+	// switch case para inserir valor
+	private static void InserirValor(Scanner criar) {
+		System.out.println("\t\n [Nova Operação] \n");
+		try {
+			System.out.println("Insira o Valor:");
+			double valor = Double.parseDouble(criar.nextLine());
+
+			System.out.println("\n[Forma de Pagamento]");
+			System.out.println("(ENTER para exibir as formas de pagamento)");
+			String tipoPag = criar.nextLine();
+
+			int opcao2;
+			do {
+				MenuPay.payMethods();
+				opcao2 = Integer.parseInt(criar.nextLine());
+
+				switch (opcao2) {
+					case 1 -> tipoPag = "Dinheiro";
+					case 2 -> tipoPag = "PIX";
+					case 3 -> tipoPag = "Cartao de Credito";
+					case 4 -> tipoPag = "Cartao de Debito";
+					default -> System.out.println("\t\n Opcão invalida!\n");
+				}
+			} while (tipoPag == null || tipoPag.isEmpty());
+
 			Transacao transacao = new Transacao(tipoPag, valor);
 			transacao.setTransacao(valor, tipoPag);
 			new TransacaoDAO().cadastrarTransacao(transacao);
 			listaDeContas.add(transacao);
-			CadastroPrd();
+		} catch (NumberFormatException e) {
+			System.out.println("Valor Invalido!");
+		}
+		CadastroPrd(criar); // Pass the scanner here
 	}
 
-		private static void CadastroPrd() {	
-			Scanner criar = new Scanner(System.in);
+	private static void CadastroPrd(Scanner criar) {
+		try {
+			System.out.println("Digite o id do Produto: \n");
+			int idProduto = Integer.parseInt(criar.nextLine());
 
-			int idProduto;
-			String nmProduto;
-			int qtProduto;
-			
-				System.out.println("digite o id do Produto: \n");
-				idProduto = Integer.parseInt(criar.nextLine());
+			System.out.println("Digite o nome do Produto: \n");
+			String nmProduto = criar.nextLine();
 
-				System.out.println("digite o nome do Produto: \n");
-				nmProduto = criar.nextLine();
-				
-				System.out.println("digite o quantidade de Produto: \n");
-				qtProduto = Integer.parseInt(criar.nextLine());
-		
+			if (nmProduto.isEmpty()) {
+				System.out.println("Nome do produto não pode ser vazio.");
+				return;
+			}
+
+			System.out.println("Digite a quantidade de Produto: \n");
+			int qtProduto = Integer.parseInt(criar.nextLine());
 
 			Produto produto = new Produto(idProduto, nmProduto, qtProduto);
-			produto.setProduto(idProduto, nmProduto, qtProduto);
+			produto.setProduto(nmProduto, qtProduto, idProduto);
 			new ProdutoDAO().cadastrarProduto(produto);
-
 			System.out.println("\n [Realizado com Sucesso!] \n");
-		
+		} catch (NumberFormatException e) {
+			System.out.println("Erro ao processar números: " + e.getMessage());
+		}
 	}
-	
-    //puxar extrato da conta
-    public static void Extrato() {
-        Transacao exibirExtrato = null;
 
+	// Pulling the statement of the account
+	private static void Extrato(Scanner criar) {
 		System.out.println("\n");
 		System.out.println("1. Extrato Parcial");
 		System.out.println("2. Extrato Detalhado");
@@ -127,34 +102,23 @@ public class Main {
 		System.out.println("4. Extrato Produto Total");
 		System.out.println("\n [Insira Opção] \n");
 
-		int opcao3;
-		Scanner criar = new Scanner(System.in);
-		opcao3 = Integer.parseInt(criar.nextLine());
+		int opcao3 = 0;
+		try {
+			opcao3 = Integer.parseInt(criar.nextLine());
+		} catch (NumberFormatException e) {
+			System.out.println("Erro ao processar a opção: " + e.getMessage());
+		}
+
 		do {
 			switch (opcao3) {
-			
-			case 1: 
-			ExtratoParcial();
-			break;
-
-			case 2: 
-			ExtratoDetalhado();
-			break;
-			
-			case 3: 
-			ExtratoProdutoDetalhado();
-			break;
-
-			case 4: 
-			ExtratoProdutoTotal();
-			break;
-
-			default:
-                System.out.println("\t\n Opcão invalida!\n");
+				case 1 -> ExtratoParcial();
+				case 2 -> ExtratoDetalhado();
+				case 3 -> ExtratoProdutoDetalhado();
+				case 4 -> ExtratoProdutoTotal();
+				default -> System.out.println("\t\n Opcão invalida!\n");
 			}
-		}while (opcao3 == 0);
-        
-    }
+		} while (opcao3 == 0);
+	}
 
 	private static void ExtratoParcial() {
 		Transacao exibirExtrato = null;

@@ -1,84 +1,77 @@
 package DAO;
 
-import java.sql.Connection;
+import aplicacao.Produto;
+import conexao.Conexao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import Aplicacao.Produto;
-import Aplicacao.Transacao;
-import conexao.Conexao;
 
 public class ProdutoDAO {
 
-    public void cadastrarProduto(Produto produto){
+    protected PreparedStatement ps = null;
 
-        String sql = "INSERT INTO produto (idProduto, nmProduto, qtProduto) VALUES (?, ?, ?)";
-    
-        PreparedStatement ps = null;
+    // Method to register a product in the database
+    public void cadastrarProduto(Produto produto) {
+
+        String sql = "INSERT INTO produto (id_produto, nm_produto, qt_produto) VALUES (?, ?, ?)";
 
         try {
             ps = Conexao.getConexao().prepareStatement(sql);
-            ps.setInt(1, produto.getidProtudo());
-            ps.setString(2, produto.getNmProduto());
-            ps.setInt(3, produto.getQtProtudo());
-        
+            ps.setInt(1, produto.getIdProdudo()); // Corrected method name
+            ps.setString(2, produto.getNmProduto()); // Corrected method name
+            ps.setInt(3, produto.getQtProdudo()); // Corrected method name
+
             ps.execute();
             ps.close();
-
-        }catch (SQLException e){
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Error: " + e);
         }
-    
+
     }
 
+    // Method to retrieve detailed product information
+    public void dtProduto(Produto produto) {
 
-    public void dtProduto(Produto produto){
-        
-            String sql = "SELECT idproduto, nmProduto, qtProduto FROM projeto.produto";
-       try{
-           PreparedStatement ps = null;
-           ps = Conexao.getConexao().prepareStatement(sql);
+        String sql = "SELECT id_produto, nm_produto, qt_produto FROM sgc_postgres.public.produto";
+        try {
+            ps = Conexao.getConexao().prepareStatement(sql);
 
-           ResultSet result = ps.executeQuery();
-               
-           System.out.println("\n Extrato Detalhado:");
-           while (result.next()) {
-               System.out.println("\n");
-               System.out.println("Id Transacao: " + result.getString("idproduto")); 
-               System.out.println("Tipo do Pagamento: " + result.getString("nmProduto")); 
-               System.out.println("Valor: " + result.getString("qtProduto"));
-               System.out.println("\n");
-           }
-           System.out.println("Esses foram os ultimos produtos!");
-           return;
-       }catch(Exception e){System.out.println(e);}
-       return;
-   }
+            ResultSet result = ps.executeQuery();
 
-        public void dtProdutoSum(Produto produto){
-                
-            String sql = "SELECT idproduto, nmProduto, SUM(qtProduto) FROM projeto.produto group by idproduto";
-        try{
-        PreparedStatement ps = null;
-        ps = Conexao.getConexao().prepareStatement(sql);
-
-        ResultSet result = ps.executeQuery();
-            
-
-            System.out.println("\n Extrato Parcial:");
-        while (result.next()) {
-            System.out.println("\n");
-            System.out.println("C�digo do produto: " + result.getString("idproduto")); 
-            System.out.println("Nome Produto: " + result.getString("nmProduto"));
-            System.out.println("Quantidades dos Produtos: " + result.getInt("SUM(qtProduto)"));
-            System.out.println("\n");
+            System.out.println("\nExtrato Detalhado:");
+            while (result.next()) {
+                System.out.println("\n");
+                System.out.println("Id Produto: " + result.getInt("id_produto"));
+                System.out.println("Nome Produto: " + result.getString("nm_produto"));
+                System.out.println("Quantidade Produto: " + result.getInt("qt_produto"));
+                System.out.println("\n");
+            }
+            System.out.println("Esses foram os últimos produtos!");
+        } catch (SQLException e) {
+            System.out.println(e);
         }
-        System.out.println("Esses foram os ultimos produtos!");
-        return;
-        }catch(Exception e){System.out.println(e);}
-        return;
+    }
+
+    // Method to retrieve the sum of product quantities
+    public void dtProdutoSum(Produto produto) {
+
+        String sql = "SELECT id_produto, nm_produto, SUM(qt_produto) FROM sgc_postgres.public.produto GROUP BY id_produto";
+        try {
+            ps = Conexao.getConexao().prepareStatement(sql);
+
+            ResultSet result = ps.executeQuery();
+
+            System.out.println("\nExtrato Parcial:");
+            while (result.next()) {
+                System.out.println("\n");
+                System.out.println("Código do Produto: " + result.getInt("id_produto"));
+                System.out.println("Nome Produto: " + result.getString("nm_produto"));
+                System.out.println("Quantidade Total dos Produtos: " + result.getInt("SUM(qt_produto)"));
+                System.out.println("\n");
+            }
+            System.out.println("Esses foram os últimos produtos!");
+        } catch (SQLException e) {
+            System.out.println(e);
         }
+    }
 }
