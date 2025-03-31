@@ -1,3 +1,4 @@
+
 import DAO.ProdutoDAO;
 import DAO.TransacaoDAO;
 import aplicacao.ProdutoRecord;
@@ -5,10 +6,7 @@ import aplicacao.TransacaoRecords;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
-import menus.MenuExtrato;
-import menus.MenuHome;
-import menus.MenuPay;
+import javax.swing.*;
 
 public class Main {
 
@@ -19,117 +17,76 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		// Initialize scanner once and pass it to methods
-		try (Scanner entrada = new Scanner(System.in)) {
-			int opcao;
-			do {
-				MenuHome.GerarMenu();
-				opcao = entrada.nextInt();
-				entrada.nextLine(); // Consume the newline character left by nextInt()
-
-				switch (opcao) {
-					case 1 -> InserirValor(entrada); // Pass the scanner here
-					case 2 -> Extrato(entrada); // Pass the scanner here
-					case 3 -> System.out.println("\t\n SGC Volte Sempre! \n");
-					default -> System.out.println("Opcao Invalida!.");
-				}
-			} while (opcao != 0);
-		}
+		SwingUtilities.invokeLater(MenuA::new);
 	}
 
-	private static void InserirValor(Scanner criar) {
-		System.out.println("\t\n [Nova Operação] \n");
+	public static void InserirValor() {
+		String valorStr = JOptionPane.showInputDialog("Insira o Valor:");
+		if (valorStr == null)
+			return;
+
 		try {
-			System.out.println("Insira o Valor:");
-			double valor = Double.parseDouble(criar.nextLine());
+			double valor = Double.parseDouble(valorStr);
 
-			System.out.println("\n[Forma de Pagamento]");
-			System.out.println("(ENTER para exibir as formas de pagamento)");
-			String tipoPag = criar.nextLine();
+			String[] opcoes = { "Dinheiro", "PIX", "Cartão de Crédito", "Cartão de Débito" };
+			String tipoPag = (String) JOptionPane.showInputDialog(
+					null, "Escolha a forma de pagamento:", "Pagamento",
+					JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
 
-			int opcao2;
-			do {
-				MenuPay.payMethods();
-				opcao2 = Integer.parseInt(criar.nextLine());
+			if (tipoPag == null)
+				return;
 
-				switch (opcao2) {
-					case 1 -> tipoPag = "Dinheiro";
-					case 2 -> tipoPag = "PIX";
-					case 3 -> tipoPag = "Cartao de Credito";
-					case 4 -> tipoPag = "Cartao de Debito";
-					default -> System.out.println("\t\n Opcão invalida!\n");
-				}
-			} while (tipoPag == null || tipoPag.isEmpty());
-
-			TransacaoRecords transacao = new TransacaoRecords(
-					valor, tipoPag, new Date());
+			TransacaoRecords transacao = new TransacaoRecords(valor, tipoPag, new Date());
 			new TransacaoDAO().cadastrarTransacao(transacao);
 			listaDeContas.add(transacao);
+
+			JOptionPane.showMessageDialog(null, "Transação realizada com sucesso!");
+
+			CadastroPrd();
 		} catch (NumberFormatException e) {
-			System.out.println("Valor Invalido!");
+			JOptionPane.showMessageDialog(null, "Valor inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
 		}
-		CadastroPrd(criar); // Pass the scanner here
 	}
 
-	private static void CadastroPrd(Scanner criar) {
+	public static void CadastroPrd() {
 		try {
-			System.out.println("Digite o id do Produto: \n");
-			int idProduto = Integer.parseInt(criar.nextLine());
+			String idStr = JOptionPane.showInputDialog("Digite o ID do Produto:");
+			if (idStr == null)
+				return;
+			int idProduto = Integer.parseInt(idStr);
 
-			System.out.println("Digite o nome do Produto: \n");
-			String nmProduto = criar.nextLine();
-
-			if (nmProduto.isEmpty()) {
-				System.out.println("Nome do produto não pode ser vazio.");
+			String nmProduto = JOptionPane.showInputDialog("Digite o nome do Produto:");
+			if (nmProduto == null || nmProduto.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Nome do produto não pode ser vazio.", "Erro", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 
-			System.out.println("Digite a quantidade de Produto: \n");
-			int qtProduto = Integer.parseInt(criar.nextLine());
+			String qtStr = JOptionPane.showInputDialog("Digite a quantidade do Produto:");
+			if (qtStr == null)
+				return;
+			int qtProduto = Integer.parseInt(qtStr);
 
 			ProdutoRecord produto = new ProdutoRecord(idProduto, nmProduto, qtProduto);
 			new ProdutoDAO().cadastrarProduto(produto);
-			System.out.println("\n [Realizado com Sucesso!] \n");
+
+			JOptionPane.showMessageDialog(null, "Produto cadastrado com sucesso!");
 		} catch (NumberFormatException e) {
-			System.out.println("Erro ao processar números: " + e.getMessage());
+			JOptionPane.showMessageDialog(null, "Erro ao processar números!", "Erro", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
-	private static void Extrato(Scanner criar) {
+	public static void Extrato() {
+		String[] opcoes = { "Parcial", "Detalhado", "Produto Detalhado", "Produto Total" };
+		int escolha = JOptionPane.showOptionDialog(
+				null, "Escolha o tipo de extrato:", "Extrato",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
 
-		MenuExtrato.GerarMenuExtrato();
-
-		int opcao3 = 0;
-		try {
-			opcao3 = Integer.parseInt(criar.nextLine());
-		} catch (NumberFormatException e) {
-			System.out.println("Erro ao processar a opção: " + e.getMessage());
+		switch (escolha) {
+			case 0 -> new TransacaoDAO().extratoParcial();
+			case 1 -> new TransacaoDAO().extratoDetalhado();
+			case 2 -> new ProdutoDAO().dtProduto();
+			case 3 -> new ProdutoDAO().dtProdutoSum();
+			default -> JOptionPane.showMessageDialog(null, "Opção inválida!");
 		}
-
-		do {
-			switch (opcao3) {
-				case 1 -> ExtratoParcial();
-				case 2 -> ExtratoDetalhado();
-				case 3 -> ExtratoProdutoDetalhado();
-				case 4 -> ExtratoProdutoTotal();
-				default -> System.out.println("\t\n Opcão invalida!\n");
-			}
-		} while (opcao3 == 0);
-	}
-
-	private static void ExtratoParcial() {
-		new TransacaoDAO().extratoParcial();
-	}
-
-	public static void ExtratoDetalhado() {
-		new TransacaoDAO().extratoDetalhado();
-	}
-
-	private static void ExtratoProdutoDetalhado() {
-		new ProdutoDAO().dtProduto();
-	}
-
-	private static void ExtratoProdutoTotal() {
-		new ProdutoDAO().dtProdutoSum();
 	}
 }
