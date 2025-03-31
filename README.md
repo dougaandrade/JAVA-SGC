@@ -14,7 +14,7 @@ Este projeto é um sistema automatizado para registrar os lucros diários de uma
 
 - 🔹 Registro diário dos lucros.
 - 🔹 Geração de relatórios financeiros.
-- 🔹 Interface amigável para facilitar o uso.
+- 🔹 Interface amigável para facilitar o uso - (Em andamento ⏳)
 
 ## 📚 Documentação
 

@@ -1,7 +1,8 @@
 import DAO.ProdutoDAO;
 import DAO.TransacaoDAO;
-import aplicacao.Produto;
-import aplicacao.Transacao;
+import aplicacao.ProdutoRecord;
+import aplicacao.TransacaoRecords;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -11,9 +12,9 @@ import menus.MenuPay;
 
 public class Main {
 
-	private static final List<Transacao> listaDeContas = new LinkedList<>();
+	private static final List<TransacaoRecords> listaDeContas = new LinkedList<>();
 
-	public static List<Transacao> getListaDeContas() {
+	public static List<TransacaoRecords> getListaDeContas() {
 		return listaDeContas;
 	}
 
@@ -60,8 +61,8 @@ public class Main {
 				}
 			} while (tipoPag == null || tipoPag.isEmpty());
 
-			Transacao transacao = new Transacao(tipoPag, valor);
-			transacao.setTransacao(valor, tipoPag);
+			TransacaoRecords transacao = new TransacaoRecords(
+					valor, tipoPag, new Date());
 			new TransacaoDAO().cadastrarTransacao(transacao);
 			listaDeContas.add(transacao);
 		} catch (NumberFormatException e) {
@@ -86,8 +87,7 @@ public class Main {
 			System.out.println("Digite a quantidade de Produto: \n");
 			int qtProduto = Integer.parseInt(criar.nextLine());
 
-			Produto produto = new Produto(idProduto, nmProduto, qtProduto);
-			produto.setProduto(nmProduto, qtProduto, idProduto);
+			ProdutoRecord produto = new ProdutoRecord(idProduto, nmProduto, qtProduto);
 			new ProdutoDAO().cadastrarProduto(produto);
 			System.out.println("\n [Realizado com Sucesso!] \n");
 		} catch (NumberFormatException e) {
@@ -118,22 +118,18 @@ public class Main {
 	}
 
 	private static void ExtratoParcial() {
-		Transacao exibirExtrato = null;
-		new TransacaoDAO().Extrato(exibirExtrato);
+		new TransacaoDAO().extratoParcial();
 	}
 
 	public static void ExtratoDetalhado() {
-		Transacao exibirExtrato = null;
-		new TransacaoDAO().ExtratoDetalhado(exibirExtrato);
+		new TransacaoDAO().extratoDetalhado();
 	}
 
 	private static void ExtratoProdutoDetalhado() {
-		Produto exibirProdutoDetalhado = null;
-		new ProdutoDAO().dtProduto(exibirProdutoDetalhado);
+		new ProdutoDAO().dtProduto();
 	}
 
 	private static void ExtratoProdutoTotal() {
-		Produto exibirProduto = null;
-		new ProdutoDAO().dtProdutoSum(exibirProduto);
+		new ProdutoDAO().dtProdutoSum();
 	}
 }

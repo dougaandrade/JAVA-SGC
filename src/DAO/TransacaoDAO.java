@@ -1,6 +1,6 @@
 package DAO;
 
-import aplicacao.Transacao;
+import aplicacao.TransacaoRecords;
 import conexao.Conexao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,14 +10,14 @@ public class TransacaoDAO {
 
     protected PreparedStatement ps = null;
 
-    public void cadastrarTransacao(Transacao transacao) {
+    public void cadastrarTransacao(TransacaoRecords transacao) {
 
         String sql = "INSERT INTO TRANSACAO (TIPOPAG, VALOR, DATA) VALUES (?, ?, ?)";
 
         try {
             ps = Conexao.getConexao().prepareStatement(sql);
-            ps.setString(1, transacao.getTipoPag());
-            ps.setDouble(2, transacao.getValor());
+            ps.setString(1, transacao.tipoPag());
+            ps.setDouble(2, transacao.valor());
             ps.setString(3, transacao.getDateAberturaFormatada());
 
             ps.execute();
@@ -28,7 +28,7 @@ public class TransacaoDAO {
         }
     }
 
-    public void Extrato(Transacao extrato) {
+    public void extratoParcial() {
 
         String sql = "SELECT tipoPag, COUNT(tipoPag) AS countTipoPag, SUM(valor) AS totalValor " +
                 "FROM sgc_postgres.public.transacao GROUP BY tipoPag";
@@ -52,9 +52,9 @@ public class TransacaoDAO {
         }
     }
 
-    public void ExtratoDetalhado(Transacao extrato) {
+    public void extratoDetalhado() {
 
-        String sql = "SELECT idTransacao, tipoPag, valor, Data  FROM sgc_postgres.public.transacao";
+        String sql = "SELECT id, tipoPag, valor, Data  FROM sgc_postgres.public.transacao";
         try {
             ps = Conexao.getConexao().prepareStatement(sql);
 
@@ -63,7 +63,7 @@ public class TransacaoDAO {
             System.out.println("\n Extrato Detalhado:");
             while (result.next()) {
                 System.out.println("\n");
-                System.out.println("Id Transacao: " + result.getString("idTransacao"));
+                System.out.println("Id Transacao: " + result.getString("id"));
                 System.out.println("Tipo do Pagamento: " + result.getString("tipoPag"));
                 System.out.println("Valor: " + result.getString("valor"));
                 System.out.println("Data: " + result.getString("Data"));

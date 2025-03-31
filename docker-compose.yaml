@@ -3,6 +3,7 @@ services:
     image: postgres:latest
     container_name: postgres_sgc
     environment:
+      POSTGRES_URL: jdbc:postgresql://localhost:5435/sgc_postgres
       POSTGRES_DB: sgc_postgres
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root

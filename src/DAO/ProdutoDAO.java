@@ -1,6 +1,6 @@
 package DAO;
 
-import aplicacao.Produto;
+import aplicacao.ProdutoRecord;
 import conexao.Conexao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,15 +10,15 @@ public class ProdutoDAO {
 
     protected PreparedStatement ps = null;
 
-    public void cadastrarProduto(Produto produto) {
+    public void cadastrarProduto(ProdutoRecord produto) {
 
         String sql = "INSERT INTO produto (id_produto, nm_produto, qt_produto) VALUES (?, ?, ?)";
 
         try {
             ps = Conexao.getConexao().prepareStatement(sql);
-            ps.setInt(1, produto.getIdProdudo());
-            ps.setString(2, produto.getNmProduto());
-            ps.setInt(3, produto.getQtProdudo());
+            ps.setInt(1, produto.id_Produto());
+            ps.setString(2, produto.nm_Produto());
+            ps.setInt(3, produto.qt_Produto());
 
             ps.execute();
             ps.close();
@@ -28,7 +28,7 @@ public class ProdutoDAO {
 
     }
 
-    public void dtProduto(Produto produto) {
+    public void dtProduto() {
 
         String sql = "SELECT id_produto, nm_produto, qt_produto FROM sgc_postgres.public.produto";
         try {
@@ -50,7 +50,7 @@ public class ProdutoDAO {
         }
     }
 
-    public void dtProdutoSum(Produto produto) {
+    public void dtProdutoSum() {
 
         String sql = "SELECT id_produto, nm_produto, SUM(qt_produto) FROM sgc_postgres.public.produto GROUP BY id_produto";
         try {
@@ -63,7 +63,7 @@ public class ProdutoDAO {
                 System.out.println("\n");
                 System.out.println("Código do Produto: " + result.getInt("id_produto"));
                 System.out.println("Nome Produto: " + result.getString("nm_produto"));
-                System.out.println("Quantidade Total dos Produtos: " + result.getInt("SUM(qt_produto)"));
+                System.out.println("Quantidade Total dos Produtos: " + result.getInt("qt_produto"));
                 System.out.println("\n");
             }
             System.out.println("Esses foram os últimos produtos!");
