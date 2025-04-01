@@ -17,7 +17,7 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(MenuA::new);
+		SwingUtilities.invokeLater(MenuExec::new);
 	}
 
 	public static void InserirValor() {

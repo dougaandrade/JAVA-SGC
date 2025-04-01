@@ -21,9 +21,9 @@ public class MenuExec extends JFrame {
     JButton btnSair = new JButton("Sair");
 
     // Eventos dos botões
-    btnInserir.addActionListener(e -> Main.InserirValor()); // Método da Main
-    btnExtrato.addActionListener(e -> Main.Extrato()); // Método da Main
-    btnSair.addActionListener(e -> System.exit(0));
+    btnInserir.addActionListener(_ -> Main.InserirValor()); // Método da Main
+    btnExtrato.addActionListener(_ -> Main.Extrato()); // Método da Main
+    btnSair.addActionListener(_ -> System.exit(0));
 
     // Adicionando botões ao painel
     panel.add(btnInserir);
