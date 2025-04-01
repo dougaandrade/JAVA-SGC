@@ -28,21 +28,34 @@ public class ProdutoDAO {
 
     }
 
-    public void dtProduto() {
+    public void produtoDetalhado() {
 
-        String sql = "SELECT id_produto, nm_produto, qt_produto FROM sgc_postgres.public.produto";
+        String selectSQL = "SELECT id_produto, nm_produto, qt_produto FROM sgc_postgres.public.produto";
+
+        String insertSQL = "INSERT INTO PRODUTODETALHADO (id_produto, nm_produto, qt_produto) VALUES (?, ?, ?)";
+
         try {
-            ps = Conexao.getConexao().prepareStatement(sql);
-
+            ps = Conexao.getConexao().prepareStatement(selectSQL);
             ResultSet result = ps.executeQuery();
 
-            System.out.println("\nExtrato Detalhado:");
+            PreparedStatement insertPs = Conexao.getConexao().prepareStatement(insertSQL);
+
+            System.out.println("\nProduto Detalhado:");
             while (result.next()) {
+                int id_produto = result.getInt("id_produto");
+                String nm_produto = result.getString("nm_produto");
+                int qt_produto = result.getInt("qt_produto");
+
                 System.out.println("\n");
-                System.out.println("Id Produto: " + result.getInt("id_produto"));
-                System.out.println("Nome Produto: " + result.getString("nm_produto"));
-                System.out.println("Quantidade Produto: " + result.getInt("qt_produto"));
+                System.out.println("Código do Produto: " + id_produto);
+                System.out.println("Nome Produto: " + nm_produto);
+                System.out.println("Quantidade Total dos Produtos: " + qt_produto);
                 System.out.println("\n");
+
+                insertPs.setInt(1, id_produto);
+                insertPs.setString(2, nm_produto);
+                insertPs.setInt(3, qt_produto);
+                insertPs.executeUpdate();
             }
             System.out.println("Esses foram os últimos produtos!");
         } catch (SQLException e) {
@@ -50,21 +63,34 @@ public class ProdutoDAO {
         }
     }
 
-    public void dtProdutoSum() {
+    public void produtoParcial() {
 
-        String sql = "SELECT id_produto, nm_produto, SUM(qt_produto) FROM sgc_postgres.public.produto GROUP BY id_produto";
+        String selectSQL = "SELECT id_produto, nm_produto, SUM(qt_produto) AS qt_produto   FROM sgc_postgres.public.produto GROUP BY id_produto";
+
+        String insertSQL = "INSERT INTO PRODUTOPARCIAL (id_produto, nm_produto, qt_produto) VALUES (?, ?, ?)";
+
         try {
-            ps = Conexao.getConexao().prepareStatement(sql);
-
+            ps = Conexao.getConexao().prepareStatement(selectSQL);
             ResultSet result = ps.executeQuery();
 
-            System.out.println("\nExtrato Parcial:");
+            PreparedStatement insertPs = Conexao.getConexao().prepareStatement(insertSQL);
+
+            System.out.println("\nProduto Parcial:");
             while (result.next()) {
+
+                int id_produto = result.getInt("id_produto");
+                String nm_produto = result.getString("nm_produto");
+                int qt_produto = result.getInt("qt_produto");
+
                 System.out.println("\n");
-                System.out.println("Código do Produto: " + result.getInt("id_produto"));
-                System.out.println("Nome Produto: " + result.getString("nm_produto"));
-                System.out.println("Quantidade Total dos Produtos: " + result.getInt("qt_produto"));
-                System.out.println("\n");
+                System.out.println("Código do Produto: " + id_produto);
+                System.out.println("Nome Produto: " + nm_produto);
+                System.out.println("Quantidade Total dos Produtos: " + qt_produto);
+
+                insertPs.setInt(1, id_produto);
+                insertPs.setString(2, nm_produto);
+                insertPs.setInt(3, qt_produto);
+                insertPs.executeUpdate();
             }
             System.out.println("Esses foram os últimos produtos!");
         } catch (SQLException e) {

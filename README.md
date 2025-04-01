@@ -9,12 +9,13 @@ Este projeto é um sistema automatizado para registrar os lucros diários de uma
 - ✅ **JDBC** – Conector para integração entre Java e PostgreSQL.
 - ✅ **Docker Compose** – Composição de serviços Docker para simplificar o desenvolvimento e execução.
 - ✅ **DBeaver** – Ferramenta de desenvolvimento para banco de dados PostgreSQL.
+- ✅ **Swing** – Framework para desenvolvimento de interfaces gráficas em Java.
 
 ## 🔥 Funcionalidades
 
-- 🔹 Registro diário dos lucros.
-- 🔹 Geração de relatórios financeiros.
-- 🔹 Interface amigável para facilitar o uso - (Em andamento ⏳)
+- 🔹 Registro diário dos lucros ✅
+- 🔹 Geração de relatórios financeiros ✅
+- 🔹 Interface amigável para facilitar o uso ✅
 
 ## 📚 Documentação
 
@@ -30,6 +31,7 @@ Antes de começar, você precisará ter instalado em sua máquina:
 - **PostgreSQL** (com o banco de dados configurado).
 - **Docker Compose** (versão 1.29.2 ou superior).
 - **DBeaver** (versão 22.1.2 ou superior).
+- **Swing** (versão 1.0.1 ou superior).
 
 ### 🚀 Clonando e Executando
 

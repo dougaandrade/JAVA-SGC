@@ -28,46 +28,69 @@ public class TransacaoDAO {
         }
     }
 
-    public void extratoParcial() {
+    public void transacaoParcial() {
 
-        String sql = "SELECT tipoPag, COUNT(tipoPag) AS countTipoPag, SUM(valor) AS totalValor " +
+        String selectSql = "SELECT tipoPag, COUNT(tipoPag) AS countTipoPag, SUM(valor) AS totalValor " +
                 "FROM sgc_postgres.public.transacao GROUP BY tipoPag";
-        try {
-            ps = Conexao.getConexao().prepareStatement(sql);
 
+        String insertSql = "INSERT INTO TRANSACAOPARCIAL (TIPOPAG, VALOR, DATA) VALUES (?, ?, NOW())";
+
+        try {
+            ps = Conexao.getConexao().prepareStatement(selectSql);
             ResultSet result = ps.executeQuery();
+
+            PreparedStatement insertPs = Conexao.getConexao().prepareStatement(insertSql);
 
             System.out.println("\n Extrato Parcial:");
             while (result.next()) {
+                String tipoPag = result.getString("tipoPag");
+                int countTipoPag = result.getInt("countTipoPag");
+                double totalValor = result.getDouble("totalValor");
 
+                System.out.println("\nTipo do Pagamento: " + tipoPag);
+                System.out.println("Quantidade de Recibo: " + countTipoPag);
+                System.out.println("Total em valor: " + totalValor);
                 System.out.println("\n");
-                System.out.println("Tipo do Pagamento: " + result.getString("tipoPag"));
-                System.out.println("Quantidade de Recibo: " + result.getInt("countTipoPag"));
-                System.out.println("Total em valor: " + result.getDouble("totalValor"));
-                System.out.println("\n");
+
+                insertPs.setString(1, tipoPag);
+                insertPs.setDouble(2, totalValor);
+                insertPs.executeUpdate();
             }
-            System.out.println("Esses foram os ultimos registros!");
+
+            System.out.println("Esses foram os últimos registros!");
+
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("Erro ao gerar extrato: " + e.getMessage());
         }
     }
 
-    public void extratoDetalhado() {
+    public void transacaoDetalhado() {
 
-        String sql = "SELECT id, tipoPag, valor, Data  FROM sgc_postgres.public.transacao";
+        String selectSql = "SELECT id, tipoPag, valor, Data  FROM sgc_postgres.public.transacao";
+
+        String insertSql = "INSERT INTO TRANSACAODETALHADO (TIPOPAG, VALOR, DATA) VALUES (?, ?, NOW())";
+
         try {
-            ps = Conexao.getConexao().prepareStatement(sql);
-
+            ps = Conexao.getConexao().prepareStatement(selectSql);
             ResultSet result = ps.executeQuery();
+
+            PreparedStatement insertPs = Conexao.getConexao().prepareStatement(insertSql);
 
             System.out.println("\n Extrato Detalhado:");
             while (result.next()) {
+
+                String tipoPag = result.getString("tipoPag");
+                double valor = result.getDouble("valor");
+                String data = result.getString("Data");
+
+                System.out.println("\nTipo do Pagamento: " + tipoPag);
+                System.out.println("Valor: " + valor);
+                System.out.println("Data: " + data);
                 System.out.println("\n");
-                System.out.println("Id Transacao: " + result.getString("id"));
-                System.out.println("Tipo do Pagamento: " + result.getString("tipoPag"));
-                System.out.println("Valor: " + result.getString("valor"));
-                System.out.println("Data: " + result.getString("Data"));
-                System.out.println("\n");
+
+                insertPs.setString(1, tipoPag);
+                insertPs.setDouble(2, valor);
+                insertPs.executeUpdate();
             }
             System.out.println("Esses foram os ultimos registros!");
 

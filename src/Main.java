@@ -76,16 +76,16 @@ public class Main {
 	}
 
 	public static void Extrato() {
-		String[] opcoes = { "Parcial", "Detalhado", "Produto Detalhado", "Produto Total" };
+		String[] opcoes = { "Transação Parcial", "Transação Detalhada", "Produto Detalhado", "Produto Parcial" };
 		int escolha = JOptionPane.showOptionDialog(
 				null, "Escolha o tipo de extrato:", "Extrato",
 				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
 
 		switch (escolha) {
-			case 0 -> new TransacaoDAO().extratoParcial();
-			case 1 -> new TransacaoDAO().extratoDetalhado();
-			case 2 -> new ProdutoDAO().dtProduto();
-			case 3 -> new ProdutoDAO().dtProdutoSum();
+			case 0 -> new TransacaoDAO().transacaoParcial();
+			case 1 -> new TransacaoDAO().transacaoDetalhado();
+			case 2 -> new ProdutoDAO().produtoDetalhado();
+			case 3 -> new ProdutoDAO().produtoParcial();
 			default -> JOptionPane.showMessageDialog(null, "Opção inválida!");
 		}
 	}
