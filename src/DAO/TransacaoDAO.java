@@ -33,7 +33,7 @@ public class TransacaoDAO {
         String selectSql = "SELECT tipoPag, COUNT(tipoPag) AS countTipoPag, SUM(valor) AS totalValor " +
                 "FROM sgc_postgres.public.transacao GROUP BY tipoPag";
 
-        String insertSql = "INSERT INTO TRANSACAOPARCIAL (TIPOPAG, VALOR, DATA) VALUES (?, ?, NOW())";
+        String insertSql = "INSERT INTO TRANSACAOPARCIAL (TIPOPAG, VALOR, QUANTIDADE ,DATA) VALUES (?, ?, ? , NOW())";
 
         try {
             ps = Conexao.getConexao().prepareStatement(selectSql);
@@ -47,13 +47,14 @@ public class TransacaoDAO {
                 int countTipoPag = result.getInt("countTipoPag");
                 double totalValor = result.getDouble("totalValor");
 
-                System.out.println("\nTipo do Pagamento: " + tipoPag);
-                System.out.println("Quantidade de Recibo: " + countTipoPag);
-                System.out.println("Total em valor: " + totalValor);
-                System.out.println("\n");
+                // System.out.println("\nTipo do Pagamento: " + tipoPag);
+                // System.out.println("Quantidade de Recibo: " + countTipoPag);
+                // System.out.println("Total em valor: " + totalValor);
+                // System.out.println("\n");
 
                 insertPs.setString(1, tipoPag);
                 insertPs.setDouble(2, totalValor);
+                insertPs.setInt(3, countTipoPag);
                 insertPs.executeUpdate();
             }
 
@@ -83,10 +84,10 @@ public class TransacaoDAO {
                 double valor = result.getDouble("valor");
                 String data = result.getString("Data");
 
-                System.out.println("\nTipo do Pagamento: " + tipoPag);
-                System.out.println("Valor: " + valor);
-                System.out.println("Data: " + data);
-                System.out.println("\n");
+                // System.out.println("\nTipo do Pagamento: " + tipoPag);
+                // System.out.println("Valor: " + valor);
+                // System.out.println("Data: " + data);
+                // System.out.println("\n");
 
                 insertPs.setString(1, tipoPag);
                 insertPs.setDouble(2, valor);

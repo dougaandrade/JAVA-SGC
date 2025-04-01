@@ -48,11 +48,11 @@ public class ProdutoDAO {
                 String nm_produto = result.getString("nm_produto");
                 int qt_produto = result.getInt("qt_produto");
 
-                System.out.println("\n");
-                System.out.println("Código do Produto: " + id_produto);
-                System.out.println("Nome Produto: " + nm_produto);
-                System.out.println("Quantidade Total dos Produtos: " + qt_produto);
-                System.out.println("\n");
+                // System.out.println("\n");
+                // System.out.println("Código do Produto: " + id_produto);
+                // System.out.println("Nome Produto: " + nm_produto);
+                // System.out.println("Quantidade Total dos Produtos: " + qt_produto);
+                // System.out.println("\n");
 
                 insertPs.setInt(1, id_produto);
                 insertPs.setString(2, nm_produto);
@@ -84,10 +84,10 @@ public class ProdutoDAO {
                 String nm_produto = result.getString("nm_produto");
                 int qt_produto = result.getInt("qt_produto");
 
-                System.out.println("\n");
-                System.out.println("Código do Produto: " + id_produto);
-                System.out.println("Nome Produto: " + nm_produto);
-                System.out.println("Quantidade Total dos Produtos: " + qt_produto);
+                // System.out.println("\n");
+                // System.out.println("Código do Produto: " + id_produto);
+                // System.out.println("Nome Produto: " + nm_produto);
+                // System.out.println("Quantidade Total dos Produtos: " + qt_produto);
 
                 insertPs.setInt(1, id_produto);
                 insertPs.setString(2, nm_produto);
