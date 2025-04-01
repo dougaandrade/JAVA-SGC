@@ -5,6 +5,8 @@ import conexao.Conexao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ProdutoDAO {
 
@@ -97,4 +99,28 @@ public class ProdutoDAO {
             System.out.println(e);
         }
     }
+
+    public List<ProdutoRecord> listarporNome() {
+        String selectSQL = "SELECT nm_produto, qt_produto FROM sgc_postgres.public.produto";
+        List<ProdutoRecord> produtos = new LinkedList<>();
+
+        try {
+            ps = Conexao.getConexao().prepareStatement(selectSQL);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                String nm_produto = result.getString("nm_produto");
+                int qt_produto = result.getInt("qt_produto");
+
+                ProdutoRecord produto = new ProdutoRecord(qt_produto, nm_produto, qt_produto);
+                produtos.add(produto);
+            }
+        } catch (
+
+        SQLException e) {
+            System.out.println(e);
+        }
+
+        return produtos;
+    }
+
 }
