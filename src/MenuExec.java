@@ -16,13 +16,13 @@ public class MenuExec extends JFrame {
     panel.setLayout(new GridLayout(3, 1, 10, 5));
 
     // Botões
-    JButton btnInserir = new JButton("Nova Operação");
+    JButton btnInserir = new JButton("Nova Transação");
     JButton btnProduto = new JButton("Visualizar Produtos");
     JButton btnTransacao = new JButton("Visualizar Transações");
     JButton btnSair = new JButton("Sair");
 
     // Eventos dos botões
-    btnInserir.addActionListener(_ -> Main.InserirValor()); // Método da Main
+    btnInserir.addActionListener(_ -> Main.Novacompra()); // Método da Main
     btnProduto.addActionListener(_ -> Main.Produto());
     btnTransacao.addActionListener(_ -> Main.Transacao()); // Método da Main
     btnSair.addActionListener(_ -> System.exit(0));
