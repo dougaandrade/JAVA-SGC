@@ -73,12 +73,12 @@ public class ProdutoDAO {
                 String nm_produto = result.getString("nm_produto");
                 int qt_produto = result.getInt("qt_produto");
                 double valor_produto = result.getDouble("valor_produto");
-                Timestamp data_cadastro = result.getTimestamp("data_cadastro"); // Alterado para Timestamp
+                Timestamp data_cadastro = result.getTimestamp("data_cadastro");
 
                 insertPs.setString(1, nm_produto);
                 insertPs.setInt(2, qt_produto);
                 insertPs.setDouble(3, valor_produto);
-                insertPs.setTimestamp(4, data_cadastro); // Alterado para setTimestamp
+                insertPs.setTimestamp(4, data_cadastro);
                 insertPs.executeUpdate();
             }
         } catch (SQLException e) {

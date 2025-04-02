@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +49,9 @@ public class TransacaoDAO {
       if (tipoProd == null)
         return;
 
-      TransacaoRecords transacao = new TransacaoRecords(quantidade, valor, tipoPag, tipoProd, quantidade, new Date());
+      Timestamp dataAbertura = new Timestamp(System.currentTimeMillis());
+
+      TransacaoRecords transacao = new TransacaoRecords(quantidade, valor, tipoPag, tipoProd, quantidade, dataAbertura);
 
       JOptionPane.showMessageDialog(null, "Transação realizada com sucesso!");
 
@@ -58,7 +60,7 @@ public class TransacaoDAO {
         ps.setDouble(2, transacao.valor());
         ps.setInt(3, transacao.quantidade());
         ps.setString(4, transacao.tipo_prod());
-        ps.setString(5, transacao.getDateAberturaFormatada());
+        ps.setTimestamp(5, (Timestamp) transacao.dataAberturaConta());
 
         ps.execute();
       }
@@ -72,8 +74,9 @@ public class TransacaoDAO {
   }
 
   public Map<String, Map<String, Object>> transacaoTotal() {
-    String selectSql = "SELECT tipo_pag, COUNT(tipo_pag) AS countTipoPag, SUM(valor) AS totalValor, quantidade " +
-        "FROM sgc_postgres.public.TRANSACAO GROUP BY tipo_pag";
+    String selectSql = "SELECT tipo_pag, SUM(valor) AS totalValor, COALESCE(SUM(quantidade), 0) AS totalQuantidade " +
+        "FROM sgc_postgres.public.TRANSACAO " +
+        "GROUP BY tipo_pag";
 
     String insertSql = "INSERT INTO TRANSACAOTOTAL (tipo_pag, valor, quantidade) VALUES (?, ?, ?)";
 
@@ -84,21 +87,18 @@ public class TransacaoDAO {
         ResultSet result = ps.executeQuery();
         PreparedStatement insertPs = conexao.prepareStatement(insertSql)) {
 
-      System.out.println("\n Extrato Parcial:");
       while (result.next()) {
         String tipoPag = result.getString("tipo_pag");
-        int countTipoPag = result.getInt("countTipoPag");
         double totalValor = result.getDouble("totalValor");
+        int totalQuantidade = result.getInt("totalQuantidade");
 
-        // Inserção no banco
         insertPs.setString(1, tipoPag);
         insertPs.setDouble(2, totalValor);
-        insertPs.setInt(3, countTipoPag);
+        insertPs.setInt(3, totalQuantidade);
         insertPs.executeUpdate();
 
-        // Adiciona ao mapa de retorno
         Map<String, Object> detalhes = new HashMap<>();
-        detalhes.put("quantidade", countTipoPag);
+        detalhes.put("quantidade", totalQuantidade);
         detalhes.put("total", totalValor);
 
         resultado.put(tipoPag, detalhes);
@@ -109,40 +109,5 @@ public class TransacaoDAO {
 
     return resultado;
   }
-
-  // // public void transacaoDetalhado() {
-
-  // String selectSql = "SELECT id, tipoPag, valor, Data FROM
-  // sgc_postgres.public.TRANSACAO";
-
-  // String insertSql = "INSERT INTO TRANSACAODETALHADO (TIPOPAG, VALOR, DATA)
-  // VALUES (?, ?, NOW())";
-
-  // try {
-  // ps = Conexao.getConexao().prepareStatement(selectSql);
-  // ResultSet result = ps.executeQuery();
-
-  // PreparedStatement insertPs =
-  // Conexao.getConexao().prepareStatement(insertSql);
-
-  // System.out.println("\n Extrato Detalhado:");
-  // while (result.next()) {
-
-  // String tipoPag = result.getString("tipoPag");
-  // double valor = result.getDouble("valor");
-  // String data = result.getString("data");
-
-  // insertPs.setString(1, tipoPag);
-  // insertPs.setDouble(2, valor);
-  // insertPs.setString(3, data);
-  // insertPs.executeUpdate();
-  // }
-  // System.out.println("Esses foram os ultimos registros!");
-
-  // } catch (SQLException e) {
-  // System.out.println(e);
-  // }
-
-  // }
 
 }

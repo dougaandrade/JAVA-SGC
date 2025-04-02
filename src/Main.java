@@ -14,7 +14,7 @@ public class Main {
 	}
 
 	public static void Transacao() {
-		String[] opcoes = { "Transação Parcial", "Transação Detalhada", "Voltar" };
+		String[] opcoes = { "Transação Total", "Voltar" };
 		int escolha = JOptionPane.showOptionDialog(
 				null, "Escolha o tipo de extrato:", "Extrato",
 				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes,
@@ -22,7 +22,7 @@ public class Main {
 
 		switch (escolha) {
 			case 0 -> new TransacaoDAO().transacaoTotal();
-			case 4 -> main(opcoes);
+			case 1 -> main(opcoes);
 			default -> JOptionPane.showMessageDialog(null, "Opção inválida!");
 		}
 	}
