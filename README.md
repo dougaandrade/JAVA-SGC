@@ -44,6 +44,6 @@ git clone https://github.com/dougaandrade/JAVA-SGC.git
 cd JAVA-SGC
 
 # Execute o Docker Compose
-docker-compose up -d
+docker-compose up --build
 
 ```
