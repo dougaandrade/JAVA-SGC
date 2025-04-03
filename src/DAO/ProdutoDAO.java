@@ -87,17 +87,18 @@ public class ProdutoDAO {
     }
 
     public List<ProdutoRecord> listarPorNome() {
-        String selectSQL = "SELECT nm_produto, qt_produto FROM sgc_postgres.public.PRODUTO";
+        String selectSQL = "SELECT   id_produto ,nm_produto, qt_produto FROM sgc_postgres.public.PRODUTO";
         List<ProdutoRecord> produtos = new LinkedList<>();
 
         try (
                 Connection conexao = Conexao.getConexao();
-                PreparedStatement ps = conexao.prepareStatement(selectSQL);
-                ResultSet result = ps.executeQuery()) {
+                PreparedStatement prs = conexao.prepareStatement(selectSQL);
+                ResultSet result = prs.executeQuery()) {
             while (result.next()) {
+                int id_produto = result.getInt("id_produto");
                 String nm_produto = result.getString("nm_produto");
                 int qt_produto = result.getInt("qt_produto");
-                produtos.add(new ProdutoRecord(nm_produto, qt_produto));
+                produtos.add(new ProdutoRecord(id_produto, nm_produto, qt_produto));
             }
         } catch (SQLException e) {
             System.err.println("Erro ao listar produtos: " + e);

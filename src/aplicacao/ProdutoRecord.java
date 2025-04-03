@@ -6,7 +6,7 @@ public record ProdutoRecord(Integer id_produto, String nm_produto, Integer qt_pr
         LocalDate data_cadastro) {
 
     // Construtor reduzido com nome e quantidade apenas
-    public ProdutoRecord(String nomeProduto, Integer quantidadeProduto) {
-        this(null, nomeProduto, quantidadeProduto, null, null);
+    public ProdutoRecord(Integer id_produto, String nomeProduto, Integer quantidadeProduto) {
+        this(id_produto, nomeProduto, quantidadeProduto, null, null);
     }
 }

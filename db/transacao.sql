@@ -1,7 +1,5 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE TABLE TRANSACAO (
-   id_produto UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id_produto SERIAL PRIMARY KEY,
     tipo_pag VARCHAR(50) NOT NULL,
     valor DECIMAL(10,2) NOT NULL,
     quantidade INT NOT NULL,

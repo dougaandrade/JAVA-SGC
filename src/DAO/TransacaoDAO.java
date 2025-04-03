@@ -15,61 +15,103 @@ import javax.swing.JOptionPane;
 
 public class TransacaoDAO {
 
-  protected PreparedStatement ps = null;
-
   public void cadastrarTransacao() {
-
-    String sql = "INSERT INTO TRANSACAO (tipo_pag, valor, quantidade, tipo_prod, data_cadastro) VALUES (?, ?, ?, ?, ?)";
-
     try {
-      double valor = Double.parseDouble(JOptionPane.showInputDialog("Insira o Valor:"));
+      double valor = obterValor();
+      String tipoPag = obterTipoPagamento();
+      int quantidade = obterQuantidade();
+      ProdutoRecord produto = obterProduto();
 
-      String[] opcoesPag = { "Dinheiro", "PIX", "Cartão de Crédito", "Cartão de Débito" };
-      String tipoPag = (String) JOptionPane.showInputDialog(
-          null, "Escolha a forma de pagamento:", "Pagamento",
-          JOptionPane.QUESTION_MESSAGE, null, opcoesPag, opcoesPag[0]);
-
-      if (tipoPag == null)
+      if (tipoPag == null || produto == null || quantidade == 0) {
+        JOptionPane.showMessageDialog(null, "Operação cancelada.");
         return;
-
-      int quantidade = Integer.parseInt(JOptionPane.showInputDialog("Insira a quantidade:"));
-
-      List<ProdutoRecord> produtos = new ProdutoDAO().listarPorNome();
-      String[] opcaoProd = new String[produtos.size()];
-
-      for (int i = 0; i < produtos.size(); i++) {
-        opcaoProd[i] = produtos.get(i).nm_produto() + " - " +
-            produtos.get(i).qt_produto() + " unidades";
       }
 
-      String tipoProd = (String) JOptionPane.showInputDialog(
-          null, "Escolha o produto:", "Produto",
-          JOptionPane.QUESTION_MESSAGE, null, opcaoProd, opcaoProd[0]);
-
-      if (tipoProd == null)
+      // Verificar se há estoque suficiente
+      if (produto.qt_produto() < quantidade) {
+        JOptionPane.showMessageDialog(null,
+            "Estoque insuficiente! Apenas " + produto.qt_produto() + " unidades disponíveis.", "Erro",
+            JOptionPane.ERROR_MESSAGE);
         return;
+      }
 
       Timestamp dataAbertura = new Timestamp(System.currentTimeMillis());
+      TransacaoRecords transacao = new TransacaoRecords(quantidade, valor, tipoPag, produto.nm_produto(), quantidade,
+          dataAbertura);
 
-      TransacaoRecords transacao = new TransacaoRecords(quantidade, valor, tipoPag, tipoProd, quantidade, dataAbertura);
+      // Salvar transação e atualizar estoque
+      salvarTransacao(transacao);
+      atualizarEstoque(produto.id_produto(), produto.qt_produto() - quantidade);
 
       JOptionPane.showMessageDialog(null, "Transação realizada com sucesso!");
-
-      try (PreparedStatement ps = Conexao.getConexao().prepareStatement(sql)) {
-        ps.setString(1, transacao.tipo_Pag());
-        ps.setDouble(2, transacao.valor());
-        ps.setInt(3, transacao.quantidade());
-        ps.setString(4, transacao.tipo_prod());
-        ps.setTimestamp(5, (Timestamp) transacao.dataAberturaConta());
-
-        ps.execute();
-      }
 
     } catch (NumberFormatException e) {
       JOptionPane.showMessageDialog(null, "Erro: Valor ou Quantidade inválidos!", "Erro", JOptionPane.ERROR_MESSAGE);
     } catch (SQLException e) {
       JOptionPane.showMessageDialog(null, "Erro ao salvar no banco: " + e.getMessage(), "Erro",
           JOptionPane.ERROR_MESSAGE);
+    }
+  }
+
+  private double obterValor() {
+    return Double.parseDouble(JOptionPane.showInputDialog("Insira o Valor:"));
+  }
+
+  private String obterTipoPagamento() {
+    String[] opcoesPag = { "Dinheiro", "PIX", "Cartão de Crédito", "Cartão de Débito" };
+    return (String) JOptionPane.showInputDialog(null, "Escolha a forma de pagamento:", "Pagamento",
+        JOptionPane.QUESTION_MESSAGE, null, opcoesPag, opcoesPag[0]);
+  }
+
+  private int obterQuantidade() {
+    return Integer.parseInt(JOptionPane.showInputDialog("Insira a quantidade:"));
+  }
+
+  private ProdutoRecord obterProduto() {
+    List<ProdutoRecord> produtos = new ProdutoDAO().listarPorNome();
+    if (produtos.isEmpty()) {
+      JOptionPane.showMessageDialog(null, "Nenhum produto cadastrado! Cadastre um produto primeiro.");
+      new ProdutoDAO().cadastrarProduto();
+      return null;
+    }
+
+    String[] opcaoProd = produtos.stream()
+        .map(prod -> prod.nm_produto() + " - " + prod.qt_produto() + " unidades")
+        .toArray(String[]::new);
+
+    String escolha = (String) JOptionPane.showInputDialog(null, "Escolha o produto:", "Produto",
+        JOptionPane.QUESTION_MESSAGE, null, opcaoProd, opcaoProd[0]);
+
+    if (escolha == null)
+      return null;
+
+    return produtos.stream()
+        .filter(p -> escolha.startsWith(p.nm_produto()))
+        .findFirst()
+        .orElse(null);
+  }
+
+  private void salvarTransacao(TransacaoRecords transacao) throws SQLException {
+    String sql = "INSERT INTO TRANSACAO (tipo_pag, valor, quantidade, tipo_prod, data_cadastro) VALUES (?, ?, ?, ?, ?)";
+
+    try (PreparedStatement prs = Conexao.getConexao().prepareStatement(sql)) {
+      prs.setString(1, transacao.tipo_Pag());
+      prs.setDouble(2, transacao.valor());
+      prs.setInt(3, transacao.quantidade());
+      prs.setString(4, transacao.tipo_prod());
+      prs.setTimestamp(5, (Timestamp) transacao.dataAberturaConta());
+
+      prs.execute();
+    }
+  }
+
+  private void atualizarEstoque(int produtoId, int novoEstoque) throws SQLException {
+    String sql = "UPDATE PRODUTO SET qt_produto = ? WHERE id_produto = ?";
+
+    try (PreparedStatement prs = Conexao.getConexao().prepareStatement(sql)) {
+      prs.setInt(1, novoEstoque);
+      prs.setInt(2, produtoId);
+      prs.executeUpdate();
     }
   }
 
@@ -83,8 +125,8 @@ public class TransacaoDAO {
     Map<String, Map<String, Object>> resultado = new HashMap<>();
 
     try (Connection conexao = Conexao.getConexao();
-        PreparedStatement ps = conexao.prepareStatement(selectSql);
-        ResultSet result = ps.executeQuery();
+        PreparedStatement prs = conexao.prepareStatement(selectSql);
+        ResultSet result = prs.executeQuery();
         PreparedStatement insertPs = conexao.prepareStatement(insertSql)) {
 
       while (result.next()) {

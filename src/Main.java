@@ -9,7 +9,7 @@ public class Main {
 		SwingUtilities.invokeLater(MenuExec::new);
 	}
 
-	public static void Novacompra() {
+	public static void NovaTransacao() {
 		new TransacaoDAO().cadastrarTransacao();
 	}
 
