@@ -90,7 +90,7 @@ public class ProdutoDAO {
 
     public List<ProdutoRecord> listarPorNome() {
         String selectSQL = "SELECT id_produto, nm_produto, qt_produto FROM sgc_postgres.public.PRODUTO ORDER BY nm_produto";
-        Set<ProdutoRecord> produtos = new LinkedHashSet<>(); // mantém ordem de inserção
+        Set<ProdutoRecord> produtos = new LinkedHashSet<>();
 
         try (
                 Connection conexao = Conexao.getConexao();
@@ -108,7 +108,6 @@ public class ProdutoDAO {
             System.err.println("Erro ao listar produtos: " + e);
         }
 
-        // retorna como lista
         return new ArrayList<>(produtos);
     }
 
