@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -122,7 +122,7 @@ public class TransacaoDAO {
 
     String insertSql = "INSERT INTO TRANSACAOTOTAL (tipo_pag, valor, quantidade) VALUES (?, ?, ?)";
 
-    Map<String, Map<String, Object>> resultado = new HashMap<>();
+    Map<String, Map<String, Object>> resultado = new LinkedHashMap<>();
 
     try (Connection conexao = Conexao.getConexao();
         PreparedStatement prs = conexao.prepareStatement(selectSql);
@@ -139,7 +139,7 @@ public class TransacaoDAO {
         insertPs.setInt(3, totalQuantidade);
         insertPs.executeUpdate();
 
-        Map<String, Object> detalhes = new HashMap<>();
+        Map<String, Object> detalhes = new LinkedHashMap<>();
         detalhes.put("quantidade", totalQuantidade);
         detalhes.put("total", totalValor);
 
