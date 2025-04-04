@@ -7,8 +7,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.JOptionPane;
 
 public class ProdutoDAO {
@@ -87,24 +89,27 @@ public class ProdutoDAO {
     }
 
     public List<ProdutoRecord> listarPorNome() {
-        String selectSQL = "SELECT   id_produto ,nm_produto, qt_produto FROM sgc_postgres.public.PRODUTO";
-        List<ProdutoRecord> produtos = new LinkedList<>();
+        String selectSQL = "SELECT id_produto, nm_produto, qt_produto FROM sgc_postgres.public.PRODUTO ORDER BY nm_produto";
+        Set<ProdutoRecord> produtos = new LinkedHashSet<>(); // mantém ordem de inserção
 
         try (
                 Connection conexao = Conexao.getConexao();
                 PreparedStatement prs = conexao.prepareStatement(selectSQL);
                 ResultSet result = prs.executeQuery()) {
+
             while (result.next()) {
                 int id_produto = result.getInt("id_produto");
                 String nm_produto = result.getString("nm_produto");
                 int qt_produto = result.getInt("qt_produto");
+
                 produtos.add(new ProdutoRecord(id_produto, nm_produto, qt_produto));
             }
         } catch (SQLException e) {
             System.err.println("Erro ao listar produtos: " + e);
         }
 
-        return produtos;
+        // retorna como lista
+        return new ArrayList<>(produtos);
     }
 
 }
