@@ -26,6 +26,11 @@ public class TransacaoDAO {
         JOptionPane.showMessageDialog(null, "Operação cancelada.");
         return;
       }
+      // Salvar transação e atualizar estoque
+
+      Timestamp dataAbertura = new Timestamp(System.currentTimeMillis());
+      TransacaoRecords transacao = new TransacaoRecords(quantidade, valor, tipoPag, produto.nm_produto(), quantidade,
+          dataAbertura);
 
       // Verificar se há estoque suficiente
       if (produto.qt_produto() < quantidade) {
@@ -35,11 +40,6 @@ public class TransacaoDAO {
         return;
       }
 
-      Timestamp dataAbertura = new Timestamp(System.currentTimeMillis());
-      TransacaoRecords transacao = new TransacaoRecords(quantidade, valor, tipoPag, produto.nm_produto(), quantidade,
-          dataAbertura);
-
-      // Salvar transação e atualizar estoque
       salvarTransacao(transacao);
       atualizarEstoque(produto.id_produto(), produto.qt_produto() - quantidade);
 
@@ -109,6 +109,7 @@ public class TransacaoDAO {
     String sql = "UPDATE PRODUTO SET qt_produto = ? WHERE id_produto = ?";
 
     try (PreparedStatement prs = Conexao.getConexao().prepareStatement(sql)) {
+
       prs.setInt(1, novoEstoque);
       prs.setInt(2, produtoId);
       prs.executeUpdate();
