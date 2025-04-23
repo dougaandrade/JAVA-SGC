@@ -1,6 +1,6 @@
 
-import DAO.ProdutoDAO;
-import DAO.TransacaoDAO;
+import dao.ProdutoDAO;
+import dao.TransacaoDAO;
 import javax.swing.*;
 
 public class Main {
