@@ -1,7 +1,6 @@
 CREATE TABLE TRANSACAO (
     id_produto SERIAL PRIMARY KEY,
     tipo_pag VARCHAR(50) NOT NULL,
-    valor DECIMAL(10,2) NOT NULL,
     quantidade INT NOT NULL,
     tipo_prod VARCHAR(50) NOT NULL,
     data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -9,7 +8,7 @@ CREATE TABLE TRANSACAO (
 
 CREATE TABLE TRANSACAOTOTAL(
     tipo_pag VARCHAR(50) NOT NULL,
-    valor DECIMAL(10,2) NOT NULL,
+    tipo_prod VARCHAR(50) NOT NULL,
     quantidade INT NOT NULL
 );
 

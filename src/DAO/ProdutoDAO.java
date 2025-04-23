@@ -1,6 +1,5 @@
 package DAO;
 
-import aplicacao.ProdutoRecord;
 import conexao.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import javax.swing.JOptionPane;
+import model.ProdutoRecord;
 
 public class ProdutoDAO {
 
@@ -89,7 +89,7 @@ public class ProdutoDAO {
     }
 
     public List<ProdutoRecord> listarPorNome() {
-        String selectSQL = "SELECT id_produto, nm_produto, qt_produto FROM sgc_postgres.public.PRODUTO ORDER BY nm_produto";
+        String selectSQL = "SELECT id_produto, nm_produto, qt_produto, valor_produto FROM sgc_postgres.public.PRODUTO ORDER BY nm_produto";
         Set<ProdutoRecord> produtos = new LinkedHashSet<>();
 
         try (
@@ -101,8 +101,9 @@ public class ProdutoDAO {
                 int id_produto = result.getInt("id_produto");
                 String nm_produto = result.getString("nm_produto");
                 int qt_produto = result.getInt("qt_produto");
+                double valor_produto = result.getDouble("valor_produto");
 
-                produtos.add(new ProdutoRecord(id_produto, nm_produto, qt_produto));
+                produtos.add(new ProdutoRecord(id_produto, nm_produto, qt_produto, valor_produto));
             }
         } catch (SQLException e) {
             System.err.println("Erro ao listar produtos: " + e);

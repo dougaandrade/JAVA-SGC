@@ -9,9 +9,9 @@ public class Conexao {
     private Conexao() {
     }
 
-    private static final String URL = "jdbc:postgresql://localhost:5435/sgc_postgres"; // Verifique a URL
-    private static final String USER = "root"; // Verifique o usuário
-    private static final String PASSWORD = "root"; // Verifique a senha
+    private static final String URL = "jdbc:postgresql://localhost:5435/sgc_postgres";
+    private static final String USER = "root";
+    private static final String PASSWORD = "root";
     private static Connection conn;
 
     public static Connection getConexao() {

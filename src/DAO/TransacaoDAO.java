@@ -1,7 +1,5 @@
 package DAO;
 
-import aplicacao.ProdutoRecord;
-import aplicacao.TransacaoRecords;
 import conexao.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,12 +10,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
+import model.ProdutoRecord;
+import model.TransacaoRecords;
 
 public class TransacaoDAO {
 
   public void cadastrarTransacao() {
     try {
-      double valor = obterValor();
       String tipoPag = obterTipoPagamento();
       int quantidade = obterQuantidade();
       ProdutoRecord produto = obterProduto();
@@ -29,32 +28,34 @@ public class TransacaoDAO {
       // Salvar transação e atualizar estoque
 
       Timestamp dataAbertura = new Timestamp(System.currentTimeMillis());
-      TransacaoRecords transacao = new TransacaoRecords(quantidade, valor, tipoPag, produto.nm_produto(), quantidade,
+      TransacaoRecords transacao = new TransacaoRecords(quantidade, tipoPag, produto.nm_produto(), quantidade,
           dataAbertura);
-
       // Verificar se há estoque suficiente
       if (produto.qt_produto() < quantidade) {
         JOptionPane.showMessageDialog(null,
             "Estoque insuficiente! Apenas " + produto.qt_produto() + " unidades disponíveis.", "Erro",
             JOptionPane.ERROR_MESSAGE);
+        removerProduto(quantidade);
         return;
       }
 
+      int novoEstoque = produto.qt_produto() - quantidade;
       salvarTransacao(transacao);
-      atualizarEstoque(produto.id_produto(), produto.qt_produto() - quantidade);
+      atualizarEstoque(produto.id_produto(), novoEstoque);
+
+      // Se o novo estoque for zero, remove o produto do banco
+      if (novoEstoque == 0) {
+        removerProduto(produto.id_produto());
+      }
 
       JOptionPane.showMessageDialog(null, "Transação realizada com sucesso!");
 
     } catch (NumberFormatException e) {
       JOptionPane.showMessageDialog(null, "Erro: Valor ou Quantidade inválidos!", "Erro", JOptionPane.ERROR_MESSAGE);
     } catch (SQLException e) {
-      JOptionPane.showMessageDialog(null, "Erro ao salvar no banco: " + e.getMessage(), "Erro",
+      JOptionPane.showMessageDialog(null, "Erro ao salvar no banco de dados: " + e.getMessage(), "Erro",
           JOptionPane.ERROR_MESSAGE);
     }
-  }
-
-  private double obterValor() {
-    return Double.parseDouble(JOptionPane.showInputDialog("Insira o Valor:"));
   }
 
   private String obterTipoPagamento() {
@@ -67,6 +68,14 @@ public class TransacaoDAO {
     return Integer.parseInt(JOptionPane.showInputDialog("Insira a quantidade:"));
   }
 
+  public void removerProduto(int idProduto) throws SQLException {
+    String sql = "DELETE FROM produto WHERE id_produto = ?";
+    try (PreparedStatement prs = Conexao.getConexao().prepareStatement(sql)) {
+      prs.setInt(1, idProduto);
+      prs.executeUpdate();
+    }
+  }
+
   private ProdutoRecord obterProduto() {
     List<ProdutoRecord> produtos = new ProdutoDAO().listarPorNome();
     if (produtos.isEmpty()) {
@@ -76,7 +85,7 @@ public class TransacaoDAO {
     }
 
     String[] opcaoProd = produtos.stream()
-        .map(prod -> prod.nm_produto() + " - " + prod.qt_produto() + " unidades")
+        .map(prod -> prod.nm_produto() + " - " + prod.qt_produto() + " unidades" + " - R$" + prod.valor_produto())
         .toArray(String[]::new);
 
     String escolha = (String) JOptionPane.showInputDialog(null, "Escolha o produto:", "Produto",
@@ -92,14 +101,13 @@ public class TransacaoDAO {
   }
 
   private void salvarTransacao(TransacaoRecords transacao) throws SQLException {
-    String sql = "INSERT INTO TRANSACAO (tipo_pag, valor, quantidade, tipo_prod, data_cadastro) VALUES (?, ?, ?, ?, ?)";
+    String sql = "INSERT INTO TRANSACAO (tipo_pag, quantidade, tipo_prod, data_cadastro) VALUES (?, ?, ?, ?)";
 
     try (PreparedStatement prs = Conexao.getConexao().prepareStatement(sql)) {
       prs.setString(1, transacao.tipo_Pag());
-      prs.setDouble(2, transacao.valor());
-      prs.setInt(3, transacao.quantidade());
-      prs.setString(4, transacao.tipo_prod());
-      prs.setTimestamp(5, (Timestamp) transacao.dataAberturaConta());
+      prs.setInt(2, transacao.quantidade());
+      prs.setString(3, transacao.tipo_prod());
+      prs.setTimestamp(4, (Timestamp) transacao.dataAberturaConta());
 
       prs.execute();
     }
@@ -117,11 +125,11 @@ public class TransacaoDAO {
   }
 
   public Map<String, Map<String, Object>> transacaoTotal() {
-    String selectSql = "SELECT tipo_pag, SUM(valor) AS totalValor, COALESCE(SUM(quantidade), 0) AS totalQuantidade " +
+    String selectSql = "SELECT tipo_pag, tipo_prod, quantidade AS totalQuantidade " +
         "FROM sgc_postgres.public.TRANSACAO " +
-        "GROUP BY tipo_pag";
+        "GROUP BY tipo_pag, tipo_prod, quantidade";
 
-    String insertSql = "INSERT INTO TRANSACAOTOTAL (tipo_pag, valor, quantidade) VALUES (?, ?, ?)";
+    String insertSql = "INSERT INTO TRANSACAOTOTAL (tipo_pag, tipo_prod, quantidade) VALUES (?, ?, ?)";
 
     Map<String, Map<String, Object>> resultado = new LinkedHashMap<>();
 
@@ -132,17 +140,17 @@ public class TransacaoDAO {
 
       while (result.next()) {
         String tipoPag = result.getString("tipo_pag");
-        double totalValor = result.getDouble("totalValor");
+        String tipoprod = result.getString("tipo_prod");
         int totalQuantidade = result.getInt("totalQuantidade");
 
         insertPs.setString(1, tipoPag);
-        insertPs.setDouble(2, totalValor);
+        insertPs.setString(2, tipoprod);
         insertPs.setInt(3, totalQuantidade);
         insertPs.executeUpdate();
 
         Map<String, Object> detalhes = new LinkedHashMap<>();
         detalhes.put("quantidade", totalQuantidade);
-        detalhes.put("total", totalValor);
+        detalhes.put("tipo_prod", tipoprod);
 
         resultado.put(tipoPag, detalhes);
       }
