@@ -17,9 +17,7 @@ public class Conexao {
     public static Connection getConexao() {
         try {
             if (conn == null || conn.isClosed()) {
-                System.out.println("Tentando conectar ao banco...");
                 conn = DriverManager.getConnection(URL, USER, PASSWORD);
-                System.out.println("Conexão bem-sucedida!");
             }
             return conn;
         } catch (SQLException e) {
